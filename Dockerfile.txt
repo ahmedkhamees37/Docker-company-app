@@ -1,0 +1,21 @@
+# Use Debian-based OpenJDK image
+   FROM openjdk:17-jdk-bullseye
+  
+   # Install required libraries for AWT (GUI support)
+   RUN apt-get update && apt-get install -y \
+       xvfb libxrender1 libxtst6 libxi6 libxrandr2 && \
+       rm -rf /var/lib/apt/lists/*
+  
+   # Set environment variable for headless mode
+  ENV DISPLAY=:99
+ 
+  # Set the working directory
+  WORKDIR /app
+ 
+ 
+  # Copy JAR file
+  COPY . /app/
+  COPY Company.jar /app/Company.jar
+ 
+  # Start Xvfb and run the Java application
+  CMD ["sh", "-c", "Xvfb :99 -screen 0 1024x768x16 & java -jar /app/Company.jar"]
